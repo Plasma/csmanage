@@ -14,6 +14,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Configuration;
 using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
+
 namespace Microsoft.Samples.WindowsAzure.ServiceManagement.Tools
 {
     class Program : ParseArgs
@@ -198,7 +200,27 @@ namespace Microsoft.Samples.WindowsAzure.ServiceManagement.Tools
                                 CSManageCommand.RoleInstanceName = tok.args[0];
                                 break;
                             }
-                    }
+						case "/config-subscriptionid":
+							{
+								CSManageCommand.SubscriptionIdOverride = tok.args[0];
+								break;
+							}
+						case "/config-certthumbprint":
+							{
+								CSManageCommand.CertificateThumbprintOverride = tok.args[0];
+								break;
+							}
+						case "/config-certstorename":
+							{
+								CSManageCommand.CertificateStoreNameOverride = (StoreName) Enum.Parse(typeof(StoreName), tok.args[0], true);
+								break;
+							}
+						case "/config-certstorelocation":
+							{
+								CSManageCommand.CertificateStoreLocationOverride = (StoreLocation)Enum.Parse(typeof(StoreLocation), tok.args[0], true);
+								break;
+							}
+					}
                 }
             }
             if (noArgs)

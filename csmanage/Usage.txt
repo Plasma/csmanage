@@ -9,9 +9,12 @@ Configuration File Settings:
         
         SubscriptionID         :    Your subscription ID. You can find this in the "Account" tab of the 
                                     Windows Azure Developer Portal.
+                                    (Override: /config-subscriptionid)
                         
         CertificateThumbprint  :    Hex thumbprint of a X509 certificate previously uploaded in
                                     the "API Certificates" section of the Windows Azure developer portal.
+                                    (Override: /config-certthumbprint)
+                                    (See Also: /config-certstorename and /config-certstorelocation)
                                     
 Resources:
 

@@ -63,7 +63,9 @@
     <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ResourceFile.resx" />
+    <EmbeddedResource Include="ResourceFile.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Usage.txt" />

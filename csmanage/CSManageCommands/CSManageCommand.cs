@@ -23,6 +23,11 @@ namespace Microsoft.Samples.WindowsAzure.ServiceManagement.Tools
 
     public partial class CSManageCommand
     {
+	    public static string CertificateThumbprintOverride;
+		public static StoreName? CertificateStoreNameOverride;
+		public static StoreLocation? CertificateStoreLocationOverride;
+		public static string SubscriptionIdOverride;
+
         public const int PollTimeoutInSeconds = 1800;
 
         public CSManageCommand()
@@ -80,8 +85,14 @@ namespace Microsoft.Samples.WindowsAzure.ServiceManagement.Tools
                 return false;
             }
 
-            X509Store certificateStore = new X509Store(StoreName.My, StoreLocation.CurrentUser);
-            certificateStore.Open(OpenFlags.ReadOnly);
+	        X509Store certificateStore;
+	        if (CertificateStoreNameOverride != null) {
+				certificateStore = new X509Store(CertificateStoreNameOverride.ToString(), CertificateStoreLocationOverride.HasValue ? CertificateStoreLocationOverride.Value : StoreLocation.CurrentUser);
+			} else {
+		        certificateStore = new X509Store(StoreName.My, StoreLocation.CurrentUser);
+	        }
+
+	        certificateStore.Open(OpenFlags.ReadOnly);
             X509Certificate2Collection certs = certificateStore.Certificates.Find(X509FindType.FindByThumbprint, CertificateThumbprint, false);
             if (certs.Count != 1)
             {
@@ -201,14 +212,14 @@ namespace Microsoft.Samples.WindowsAzure.ServiceManagement.Tools
 
         private static bool ReadFromConfigFile()
         {
-            CSManageCommand.CertificateThumbprint = Utility.TryGetConfigurationSetting("CertificateThumbprint");
+            CSManageCommand.CertificateThumbprint = CertificateThumbprintOverride ?? Utility.TryGetConfigurationSetting("CertificateThumbprint");
             if (string.IsNullOrEmpty(CSManageCommand.CertificateThumbprint))
             {
                 Console.WriteLine("Cannot find CertificateThumbprint in the config file");
                 return false;
             }
 
-            CSManageCommand.SubscriptionId = Utility.TryGetConfigurationSetting("SubscriptionId");
+            CSManageCommand.SubscriptionId = SubscriptionIdOverride ?? Utility.TryGetConfigurationSetting("SubscriptionId");
             if (string.IsNullOrEmpty(CSManageCommand.SubscriptionId))
             {
                 Console.WriteLine("Cannot find SubscriptionId in the config file");
